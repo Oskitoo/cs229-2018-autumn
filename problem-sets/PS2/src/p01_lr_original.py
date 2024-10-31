@@ -44,16 +44,17 @@ def logistic_regression(X, Y):
         i += 1
         prev_theta = theta
         grad = calc_grad(X, Y, theta)
-        theta = theta - learning_rate * grad
-        cosine_similarity = np.dot(theta, prev_theta) / (np.linalg.norm(theta) * np.linalg.norm(prev_theta))
+        theta = theta - learning_rate/(i*i) * grad
         if i % 10000 == 0:
             print('Finished %d iterations' % i)
             print('Theta was: ', theta)
-            plot_data(X,Y,theta)
-        if np.isclose(cosine_similarity,1):
+            # plot_data(X,Y,theta)
+
+        if np.linalg.norm(prev_theta - theta) < 1e-15:
             print('Converged in %d iterations' % i)
             print('Theta was: ', theta)
-            plot_data(X,Y,theta)
+            # plot_data(X,Y,theta)
+
             break
     return
 
@@ -62,11 +63,12 @@ def main():
     print('==== Training model on data set A ====')
     Xa, Ya = util.load_csv('../data/ds1_a.csv', add_intercept=True)
     logistic_regression(Xa, Ya)
-    # plot_data(Xa,Ya)
 
     print('\n==== Training model on data set B ====')
     Xb, Yb = util.load_csv('../data/ds1_b.csv', add_intercept=True)
     logistic_regression(Xb, Yb)
+    
+
 
 if __name__ == '__main__':
     main()
